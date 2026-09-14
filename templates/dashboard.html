@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>finance ticker</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>finance ticker</h1>
+  <div class="status">
+    <span id="clock"></span>
+    <span class="market {{ 'open' if market_open else 'closed' }}">
+      {{ 'market open' if market_open else 'market closed' }}
+    </span>
+  </div>
+</header>
+
+<section class="cards">
+  {% for item in watchlist %}
+    {% set p = prices.get(item.ticker) %}
+    {% set above_hit = p and p.price >= item.alert_above %}
+    {% set below_hit = p and p.price <= item.alert_below %}
+    <div class="card{% if above_hit %} hit-above{% elif below_hit %} hit-below{% endif %}">
+      <div class="row">
+        <span class="symbol">{{ item.ticker }}</span>
+        <span class="arrow {{ p.direction if p else '' }}">
+          {% if p and p.direction == 'up' %}up
+          {% elif p and p.direction == 'down' %}down
+          {% else %}-{% endif %}
+        </span>
+      </div>
+      <div class="name">{{ item.name }}</div>
+      <div class="price">
+        {% if p %}${{ '%.2f' % p.price }}{% else %}--{% endif %}
+      </div>
+      <div class="thresholds">
+        <span class="above">above ${{ '%.2f' % item.alert_above }}</span>
+        <span class="below">below ${{ '%.2f' % item.alert_below }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+<section class="alerts">
+  <h2>alerts</h2>
+  {% if alerts %}
+    <ul>
+      {% for a in alerts %}
+        <li class="alert-{{ a.direction }}">
+          <span class="alert-ts">{{ a.timestamp }}</span>
+          <span class="alert-body">
+            {{ a.ticker }} crossed {{ a.direction }} ${{ '%.2f' % a.threshold }}
+            at ${{ '%.2f' % a.price }}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">no alerts yet</p>
+  {% endif %}
+</section>
+
+<script>
+function tick() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+}
+tick();
+setInterval(tick, 1000);
+setInterval(function () { location.reload(); }, 30000);
+</script>
+
+</body>
+</html>

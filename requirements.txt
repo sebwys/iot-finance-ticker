@@ -1,0 +1,3 @@
+yfinance
+flask
+paho-mqtt<2.0

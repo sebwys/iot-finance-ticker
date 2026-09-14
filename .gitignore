@@ -1,0 +1,15 @@
+# local config and device certs, never commit
+config.json
+certs/*
+!certs/.gitkeep
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# course report
+*.pdf

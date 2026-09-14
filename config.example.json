@@ -1,0 +1,42 @@
+{
+  "watchlist": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "alert_above": 400.0,
+      "alert_below": 150.0
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "alert_above": 600.0,
+      "alert_below": 200.0
+    },
+    {
+      "ticker": "BTC-USD",
+      "name": "Bitcoin",
+      "alert_above": 150000.0,
+      "alert_below": 50000.0
+    },
+    {
+      "ticker": "SPY",
+      "name": "S&P 500 ETF",
+      "alert_above": 800.0,
+      "alert_below": 600.0
+    }
+  ],
+  "refresh_interval_seconds": 60,
+  "mqtt": {
+    "endpoint": "<your-iot-endpoint>-ats.iot.<region>.amazonaws.com",
+    "port": 8883,
+    "topic": "finance/alerts",
+    "client_id": "pi-finance-ticker",
+    "ca_cert": "certs/root-CA.crt",
+    "cert": "certs/device.pem.crt",
+    "key": "certs/device.pem.key"
+  },
+  "flask": {
+    "host": "0.0.0.0",
+    "port": 5001
+  }
+}
