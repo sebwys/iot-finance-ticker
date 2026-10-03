@@ -70,8 +70,8 @@ class TickerEngine:
         }
 
     def market_open(self):
-        # us equities mon-fri 9:30 to 16:00 ET
-        # rough dst: mar-nov is edt (utc-4), else est (utc-5)
+        # us equities mon to fri, 9:30 to 16:00 eastern
+        # rough dst: mar to nov is edt (utc-4), else est (utc-5)
         now = datetime.now(timezone.utc)
         offset = -4 if 3 <= now.month <= 11 else -5
         local = now + timedelta(hours=offset)

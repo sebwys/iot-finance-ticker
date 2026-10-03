@@ -31,7 +31,7 @@ def ticker_loop():
             state['prices'] = prices
             for alert in new_alerts:
                 state['alerts'].insert(0, alert)
-            # cap memory so we dont keep alerts forever
+            # keep only the newest 100 alerts
             if len(state['alerts']) > 100:
                 state['alerts'] = state['alerts'][:100]
 

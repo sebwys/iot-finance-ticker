@@ -1,8 +1,8 @@
 # iot finance ticker
 
 built as a cs437 (internet of things) final project. a raspberry pi pulls live
-prices via yfinance, evaluates thresholds locally, serves a phone-sized dashboard
-over flask, and ships alerts to aws iot core, which logs them in dynamodb.
+prices via yfinance and evaluates thresholds locally. flask serves a dashboard
+sized for a phone. alerts ship to aws iot core, which logs them in dynamodb.
 
 ## setup
 
@@ -31,23 +31,23 @@ python app.py
 then open `http://<pi-ip>:5001` from a phone on the same wifi. the port is set
 in `config.json`.
 
-if `certs/` is empty the app still runs, it just skips the mqtt step, so the
-dashboard can be demoed without the aws side wired up.
+if `certs/` is empty the app skips the mqtt step and the dashboard runs
+without the aws side.
 
 ## files
 
 - `app.py` flask server + background ticker thread
 - `ticker_engine.py` yfinance polling, threshold logic, market hours
-- `mqtt_publisher.py` paho-mqtt over tls, no-ops if no certs
+- `mqtt_publisher.py` paho-mqtt over tls, does nothing if no certs
 - `templates/dashboard.html` the mobile dashboard page
 - `static/style.css` dark theme, mobile friendly
 - `lambda/alert_logger.py` aws lambda that writes alerts to dynamodb
-- `config.example.json` watchlist, thresholds, mqtt and flask config (copy to `config.json`)
+- `config.example.json` watchlist, thresholds, mqtt and flask config
 
 ## aws side (one time)
 
 1. create a thing named `pi-finance-ticker`
-2. download the certs, drop them in `certs/`
+2. download the certs
 3. policy: allow `iot:Publish` on `finance/alerts` and `iot:Connect`
 4. iot rule: `SELECT * FROM 'finance/alerts'` to invoke the lambda
 5. lambda from `lambda/alert_logger.py`, give it dynamodb write
